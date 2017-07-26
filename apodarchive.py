@@ -10,15 +10,19 @@ import re
 import argparse
 
 parser = argparse.ArgumentParser(description="APOD Archive parses all entries in NASAs Astronomy Picture of the Day website archive and downloads the images to a location you specify!")
-parser.add_argument('location', type=str, help="The location you would like to store the images.")
-parser.add_argument('--log', action='store_true', default=False, help="Enable logging of parsed pages.")
-parser.add_argument('--debug', action='store_true', default=False, help="Enable debugging to print to screen.")
+parser.add_argument('-d', '--dir', action='store_true', default=False, help="Setting will prompt you for a desired storage location. Without --dir, APODArchive will store all images and logs in the directory the script is run from.")
+parser.add_argument('-l', '--log', action='store_true', default=False, help="Enable logging of parsed pages.")
+parser.add_argument('-b', '--debug', action='store_true', default=False, help="Enable debugging to print to screen.")
 
 if __name__ == '__main__':
     args = parser.parse_args(sys.argv[1:])
 
 #Variables
-location = args.location
+loc = args.dir
+if loc:
+    location = input("Please specify a storage directory: ") #Ask user for folder
+else:
+    location = os.path.dirname(os.path.realpath(__file__)) #Get current directory
 log = args.log
 debug = args.debug
 thisLink = 0 
@@ -41,11 +45,11 @@ body = soup.find('b')
 numberOfLinks = len(body.findAll('a')) 
 
 
-if not os.path.isdir(location):
-    os.makedirs(location)
+if not os.path.isdir(location): #If the specified directrory does not exist,
+    os.makedirs(location) #Make it so!
 
 if log:
-    log_file = open(location + '/apodLog.txt', 'w')
+    log_file = open(location + '/apodLog.txt', 'w') #Open a new log file.
 
 #For each link in Soup
 for link in body.findAll('a'):
