@@ -22,7 +22,27 @@ loc = args.dir
 if loc:
     location = input("Please specify a storage directory: ") #Ask user for folder
 else:
-    location = os.path.dirname(os.path.realpath(__file__)) #Get current directory
+    # usedefault = input("No directory has been specified. Use current directory? (Y/N): ")
+    # usedefault = usedefault.lower()
+
+    # while usedefault != 'y' or usedefault != 'n':
+    #     if usedefault == 'n':
+    #         break;
+    #     if usedefault =='y':
+    #         location = os.path.dirname(os.path.realpath(__file__)) #Get current directory
+
+    while True:
+        try:
+            usedefault = input("No directory has been specified. Use current directory? (Y/N): ")
+            usedefault = usedefault.lower()
+            if usedefault == 'n':
+                sys.exit()
+            if usedefault == 'y':
+                location = os.path.dirname(os.path.realpath(__file__)) #Get current directory
+                break
+        except NameError:
+            print('Input was invalid - please try again.')
+
 log = args.log
 debug = args.debug
 thisLink = 0 
